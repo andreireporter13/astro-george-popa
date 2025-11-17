@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.btn-language {
+  padding: 0.4rem 0.8rem;
+  background-color: #222;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.btn-language:hover {
+  background-color: #555;
+}

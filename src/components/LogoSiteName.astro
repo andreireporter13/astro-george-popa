@@ -1,0 +1,28 @@
+---
+const { lang } = Astro.props;
+const currentUrl = lang === 'en' ? '/en/' : '/ro/';
+---
+
+<a href={currentUrl} class="LogoAndName">
+  <img
+    src="/src/assets/george-popa-fotograf-logo-fotografii-constanta-evenimente-nunta-botez-si-altele.png"
+    alt="George Popa Fotograf Evenimente: nunta, botez, majorat, newborn, kids, save the date"
+    height="42"
+  />
+  <span class="SiteName">
+    George Popa Fotograf
+  </span>
+</a>
+
+<style>
+  .LogoAndName {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+  }
+  
+  .SiteName {
+    font-weight: bold;
+  }
+</style>
