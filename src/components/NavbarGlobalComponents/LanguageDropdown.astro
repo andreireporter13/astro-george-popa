@@ -1,0 +1,35 @@
+---
+import { getTranslatedUrl } from '../../composables/NavbarComposables/pageTranslations.js';
+
+const { lang, currentPath } = Astro.props;
+
+const languages = [
+  { 
+    code: "ro", 
+    label: "Romana", 
+    flag: "🇷🇴", 
+    url: getTranslatedUrl(currentPath, 'ro')
+  },
+  { 
+    code: "en", 
+    label: "English", 
+    flag: "🇬🇧", 
+    url: getTranslatedUrl(currentPath, 'en')
+  },
+];
+
+// Fallback to Romanian if the language is not found
+const currentLang = languages.find(l => l.code === lang) || languages[0];
+const otherLanguages = languages.filter(l => l.code !== lang);
+---
+
+<details>
+  <summary>{currentLang.flag} {currentLang.label}</summary>
+  <ul>
+    {otherLanguages.map(l => (
+      <li>
+        <a href={l.url}>{l.flag} {l.label}</a>
+      </li>
+    ))}
+  </ul>
+</details>

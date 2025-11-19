@@ -1,0 +1,29 @@
+---
+import { navItemsRO, navItemsEN } from '../../composables/NavbarComposables/navItems.js';
+
+const { lang, currentPath } = Astro.props;
+
+// Automatically choose the correct navItems based on the language
+const navItems = lang === 'en' ? navItemsEN : navItemsRO;
+---
+
+<nav>
+  <!-- HOME LINK -->
+  <a href={navItems.home.href}>{navItems.home.label}</a>
+
+  <!-- MAIN NAV -->
+  <ul>
+    {navItems.items.map(item => (
+      <li>
+        <a href={item.href}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+
+  <slot name="language-dropdown" />
+
+  <!-- CONTACT BUTTON SLOT -->
+  <div class="contact-btn">
+    <slot name="contact-button" />
+  </div>
+</nav>

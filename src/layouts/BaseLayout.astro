@@ -1,7 +1,8 @@
 ---
-import LogoSiteName from '../components/LogoSiteName.astro';
-import Navbar from '../components/NavbarComponent.astro';
-import ContactButtonComponent from '../components/ContactButtonComponent.vue';
+import LogoSiteName from '../components/NavbarGlobalComponents/LogoSiteName.astro';
+import Navbar from '../components/NavbarGlobalComponents/NavbarComponent.astro';
+import ContactButtonComponent from '../components/NavbarGlobalComponents/ContactButtonComponent.vue';
+import LanguageDropdown from '../components/NavbarGlobalComponents/LanguageDropdown.astro';
 
 const { lang } = Astro.props;
 
@@ -23,6 +24,10 @@ const currentPath = Astro.url.pathname;
 
     <!-- Navbar with contact button passed as slot -->
     <Navbar lang={lang} currentPath={currentPath}>
+
+        <!-- LANGUAGE DROPDOWN -->
+        <LanguageDropdown slot="language-dropdown" lang={lang} currentPath={currentPath} />
+
       <ContactButtonComponent slot="contact-button" client:load lang={lang} />
     </Navbar>
   </header>
