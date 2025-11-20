@@ -5,116 +5,155 @@ const { lang, currentPath } = Astro.props;
 
 // Automatically choose the correct navItems based on the language
 const navItems = lang === 'en' ? navItemsEN : navItemsRO;
+
+// Function to check if any menu item is active
+function isAnyItemActive() {
+  // Check main menu items
+  if (Object.values(navItems).some(item => item.href === currentPath)) {
+    return true;
+  }
+  
+  // Check dropdown items
+  if (navItems.wedding?.items?.some(item => item.href === currentPath)) {
+    return true;
+  }
+  
+  if (navItems.sessions?.items?.some(item => item.href === currentPath)) {
+    return true;
+  }
+  
+  return false;
+}
+
+const shouldHighlightHome = !isAnyItemActive();
 ---
 
-<nav class="navbar-component" id="navbar">
+<nav class="navbar-component" id="navbar" transition:persist>
   <div class="navbar-component__container">
     <!-- LOGO AND NAME SLOT - STANGA -->
     <div class="navbar-component__logo">
       <slot name="logo-and-name" />
     </div>
 
+    <!-- HAMBURGER BUTTON - MOBILE -->
+    <button class="navbar-component__hamburger" id="hamburger" aria-label="Toggle menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
     <!-- MAIN NAV - MIJLOC -->
-    <ul class="navbar-component__list">
-      <!-- HOME -->
-      <li class="navbar-component__item">
-        <a 
-          href={navItems.home.href}
-          class={`navbar-component__link ${currentPath === navItems.home.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.home.label}</span>
-          <span class="link-underline"></span>
-        </a>
-      </li>
+    <div class="navbar-component__menu" id="navMenu">
+      <ul class="navbar-component__list">
+        <!-- HOME -->
+        <li class="navbar-component__item">
+          <a 
+            href={navItems.home.href}
+            class={`navbar-component__link ${(currentPath === navItems.home.href || shouldHighlightHome) ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.home.label}</span>
+            <span class="link-underline"></span>
+          </a>
+        </li>
 
-      <!-- DESPRE MINE / ABOUT ME -->
-      <li class="navbar-component__item">
-        <a 
-          href={navItems.aboutMe.href}
-          class={`navbar-component__link ${currentPath === navItems.aboutMe.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.aboutMe.label}</span>
-          <span class="link-underline"></span>
-        </a>
-      </li>
+        <!-- DESPRE MINE / ABOUT ME -->
+        <li class="navbar-component__item">
+          <a 
+            href={navItems.aboutMe.href}
+            class={`navbar-component__link ${currentPath === navItems.aboutMe.href ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.aboutMe.label}</span>
+            <span class="link-underline"></span>
+          </a>
+        </li>
 
-      <!-- NUNTA / WEDDING - with dropdown -->
-      <li class="navbar-component__item navbar-component__item--dropdown">
-        <a 
-          href={navItems.wedding.href}
-          class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.wedding.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.wedding.label}</span>
-          <span class="link-underline"></span>
-        </a>
-        <ul class="navbar-component__dropdown">
-          {navItems.wedding.items.map(item => (
-            <li>
-              <a 
-                href={item.href}
-                class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
-              >
-                <span class="dropdown-icon">💍</span>
-                <span>{item.label}</span>
-                <span class="dropdown-arrow">→</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </li>
+        <!-- NUNTA / WEDDING - with dropdown -->
+        <li class="navbar-component__item navbar-component__item--dropdown">
+          <a 
+            href={navItems.wedding.href}
+            class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.wedding.href ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.wedding.label}</span>
+            <span class="link-underline"></span>
+          </a>
+          <ul class="navbar-component__dropdown">
+            {navItems.wedding.items.map((item, index) => {
+              const icon = index === 0 ? '💍' : '👗';
+              return (
+                <li>
+                  <a 
+                    href={item.href}
+                    class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
+                  >
+                    <span class="dropdown-icon">{icon}</span>
+                    <span>{item.label}</span>
+                    <span class="dropdown-arrow">→</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
 
-      <!-- BOTEZ / BAPTISM -->
-      <li class="navbar-component__item">
-        <a 
-          href={navItems.baptism.href}
-          class={`navbar-component__link ${currentPath === navItems.baptism.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.baptism.label}</span>
-          <span class="link-underline"></span>
-        </a>
-      </li>
+        <!-- BOTEZ / BAPTISM -->
+        <li class="navbar-component__item">
+          <a 
+            href={navItems.baptism.href}
+            class={`navbar-component__link ${currentPath === navItems.baptism.href ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.baptism.label}</span>
+            <span class="link-underline"></span>
+          </a>
+        </li>
 
-      <!-- SEDINTE / SESSIONS - with dropdown -->
-      <li class="navbar-component__item navbar-component__item--dropdown">
-        <a 
-          href={navItems.sessions.href}
-          class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.sessions.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.sessions.label}</span>
-          <span class="link-underline"></span>
-        </a>
-        <ul class="navbar-component__dropdown">
-          {navItems.sessions.items.map((item, index) => {
-            const icons = ['🤰', '👶', '🎈'];
-            return (
-              <li>
-                <a 
-                  href={item.href}
-                  class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
-                >
-                  <span class="dropdown-icon">{icons[index]}</span>
-                  <span>{item.label}</span>
-                  <span class="dropdown-arrow">→</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </li>
+        <!-- SEDINTE / SESSIONS - with dropdown -->
+        <li class="navbar-component__item navbar-component__item--dropdown">
+          <a 
+            href={navItems.sessions.href}
+            class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.sessions.href ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.sessions.label}</span>
+            <span class="link-underline"></span>
+          </a>
+          <ul class="navbar-component__dropdown">
+            {navItems.sessions.items.map((item, index) => {
+              const icons = ['🤰', '👶', '🎈'];
+              return (
+                <li>
+                  <a 
+                    href={item.href}
+                    class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
+                  >
+                    <span class="dropdown-icon">{icons[index]}</span>
+                    <span>{item.label}</span>
+                    <span class="dropdown-arrow">→</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
 
-      <!-- CONTACT -->
-      <li class="navbar-component__item">
-        <a 
-          href={navItems.contact.href}
-          class={`navbar-component__link ${currentPath === navItems.contact.href ? 'navbar-component__link--active' : ''}`}
-        >
-          <span class="link-text">{navItems.contact.label}</span>
-          <span class="link-underline"></span>
-        </a>
-      </li>
-    </ul>
+        <!-- CONTACT -->
+        <li class="navbar-component__item">
+          <a 
+            href={navItems.contact.href}
+            class={`navbar-component__link ${currentPath === navItems.contact.href ? 'navbar-component__link--active' : ''}`}
+          >
+            <span class="link-text">{navItems.contact.label}</span>
+            <span class="link-underline"></span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- ACTIONS - DREAPTA -->
+      <!-- MOBILE ACTIONS IN MENU -->
+      <div class="navbar-component__mobile-actions">
+        <slot name="language-dropdown" />
+        <slot name="contact-button" />
+      </div>
+    </div>
+
+    <!-- ACTIONS - DREAPTA (DESKTOP ONLY) -->
     <div class="navbar-component__actions">
       <slot name="language-dropdown" />
       
@@ -124,6 +163,9 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
       </div>
     </div>
   </div>
+
+  <!-- OVERLAY FOR MOBILE MENU -->
+  <div class="navbar-component__overlay" id="navOverlay"></div>
 </nav>
 
 <style>
@@ -164,6 +206,50 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    z-index: 1001;
+  }
+
+  /* HAMBURGER BUTTON */
+  .navbar-component__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+
+  .scrolled .hamburger-line {
+    background: #1a1515;
+  }
+
+  .navbar-component__hamburger.active .hamburger-line:nth-child(1) {
+    transform: translateY(10.5px) rotate(45deg);
+  }
+
+  .navbar-component__hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar-component__hamburger.active .hamburger-line:nth-child(3) {
+    transform: translateY(-10.5px) rotate(-45deg);
+  }
+
+  /* MENU WRAPPER */
+  .navbar-component__menu {
+    display: contents;
   }
 
   /* MENIU - MIJLOC */
@@ -181,6 +267,18 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
   .navbar-component__item {
     margin: 0;
     position: relative;
+  }
+
+  /* Bridge the gap with invisible area */
+  .navbar-component__item--dropdown::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: transparent;
+    pointer-events: auto;
   }
 
   .navbar-component__link {
@@ -267,12 +365,12 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
     transform: rotate(180deg);
   }
 
-  /* DROPDOWN STYLES */
+  /* DROPDOWN STYLES - Aligned to start from left */
   .navbar-component__dropdown {
     position: absolute;
-    top: calc(100% + 0.25rem);
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    top: calc(100% + 10px);
+    left: 0;
+    transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -298,7 +396,7 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
   .navbar-component__item--dropdown:hover .navbar-component__dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
     pointer-events: all;
   }
 
@@ -381,6 +479,16 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
     align-items: center;
   }
 
+  /* MOBILE ACTIONS */
+  .navbar-component__mobile-actions {
+    display: none;
+  }
+
+  /* OVERLAY */
+  .navbar-component__overlay {
+    display: none;
+  }
+
   /* Responsive */
   @media (max-width: 1200px) {
     .navbar-component__container {
@@ -417,63 +525,156 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 968px) {
     .navbar-component {
-      background: rgba(26, 21, 21, 0.98);
+      background: transparent;
     }
 
-    .navbar-component.scrolled {
-      background: #ffffff;
+    .navbar-component.scrolled,
+    .navbar-component.menu-active {
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .navbar-component__container {
-      flex-wrap: wrap;
       gap: 1rem;
       padding: 0 1rem;
-      justify-content: center;
-      max-width: 100%;
     }
 
-    .navbar-component__logo {
-      width: 100%;
-      justify-content: center;
+    /* Remove ::before on mobile */
+    .navbar-component__item--dropdown::before {
+      display: none;
+    }
+
+    /* Show hamburger */
+    .navbar-component__hamburger {
+      display: flex;
+    }
+
+    /* Hide desktop actions */
+    .navbar-component__actions {
+      display: none;
+    }
+
+    /* Mobile menu */
+    .navbar-component__menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 85%;
+      max-width: 400px;
+      height: 100vh;
+      background: linear-gradient(135deg, #fefefe 0%, #f8f8f8 100%);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      z-index: 1000;
+      padding: 6rem 2rem 3rem;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-component__menu.active {
+      transform: translateX(0);
     }
 
     .navbar-component__list {
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
       width: 100%;
-      justify-content: center;
+    }
+
+    .navbar-component__item {
+      width: 100%;
     }
 
     .navbar-component__link {
-      padding: 0.5rem 0.85rem;
-      font-size: 0.85rem;
-    }
-
-    .navbar-component__actions {
-      width: 100%;
+      display: flex;
       justify-content: center;
+      width: 100%;
+      color: #1a1a1a;
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      padding: 1.1rem 1.5rem;
+      font-size: 1.05rem;
+      border-radius: 12px;
     }
 
+    .navbar-component__link:hover {
+      background: #ffffff;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.15);
+      transform: translateY(-2px);
+      color: #dc2626;
+    }
+
+    .navbar-component__link--active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);
+    }
+
+    .link-underline {
+      display: none;
+    }
+
+    /* Mobile dropdown */
     .navbar-component__dropdown {
       position: static;
       opacity: 1;
       visibility: visible;
       transform: none;
-      box-shadow: none;
-      background: rgba(196, 165, 116, 0.05);
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border: 1px solid rgba(196, 165, 116, 0.15);
+      background: rgba(249, 249, 249, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-top: 0.75rem;
+      display: none;
     }
 
-    .scrolled .navbar-component__dropdown {
-      background: rgba(249, 249, 249, 0.9);
+    .navbar-component__item--dropdown.active .navbar-component__dropdown {
+      display: block;
+    }
+
+    .navbar-component__dropdown-link {
+      color: #666666;
+      padding: 0.95rem 1.2rem;
     }
 
     .navbar-component__dropdown-link:hover {
-      transform: translateX(3px);
+      background: #ffffff;
+      color: #dc2626;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Mobile actions */
+    .navbar-component__mobile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Overlay */
+    .navbar-component__overlay {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .navbar-component__overlay.active {
+      opacity: 1;
+      visibility: visible;
     }
   }
 
@@ -487,12 +688,60 @@ const navItems = lang === 'en' ? navItemsEN : navItemsRO;
 
 <script>
   const navbar = document.getElementById('navbar');
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('navMenu');
+  const navOverlay = document.getElementById('navOverlay');
+  const dropdownItems = document.querySelectorAll('.navbar-component__item--dropdown');
   
+  // Scroll handler
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
       navbar?.classList.add('scrolled');
     } else {
       navbar?.classList.remove('scrolled');
     }
+  });
+
+  // Mobile menu toggle
+  hamburger?.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu?.classList.toggle('active');
+    navOverlay?.classList.toggle('active');
+    navbar?.classList.toggle('menu-active');
+    document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Close menu when clicking overlay
+  navOverlay?.addEventListener('click', () => {
+    hamburger?.classList.remove('active');
+    navMenu?.classList.remove('active');
+    navOverlay?.classList.remove('active');
+    navbar?.classList.remove('menu-active');
+    document.body.style.overflow = '';
+  });
+
+  // Mobile dropdown toggle
+  if (window.innerWidth <= 968) {
+    dropdownItems.forEach(item => {
+      const link = item.querySelector('.navbar-component__link--parent');
+      link?.addEventListener('click', (e) => {
+        e.preventDefault();
+        item.classList.toggle('active');
+      });
+    });
+  }
+
+  // Close menu when clicking on a link
+  const allLinks = document.querySelectorAll('.navbar-component__link, .navbar-component__dropdown-link');
+  allLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 968) {
+        hamburger?.classList.remove('active');
+        navMenu?.classList.remove('active');
+        navOverlay?.classList.remove('active');
+        navbar?.classList.remove('menu-active');
+        document.body.style.overflow = '';
+      }
+    });
   });
 </script>

@@ -1,20 +1,13 @@
 ---
+
 import LogoSiteName from '../components/NavbarGlobalComponents/LogoSiteName.astro';
 import Navbar from '../components/NavbarGlobalComponents/NavbarComponent.astro';
 import ContactButtonComponent from '../components/NavbarGlobalComponents/ContactButtonComponent.vue';
 import LanguageDropdown from '../components/NavbarGlobalComponents/LanguageDropdown.astro';
 import FooterComponent from '../components/FooterGlobalComponents/FooterComponent.astro';
 
-import HeroPageComponent from '../components/HomePageComponets/HeroPageComponent.astro';
-
-// Get current path
 const currentPath = Astro.url.pathname;
-
-// Automatically detect language from URL
-// If path starts with /en, use 'en', otherwise default to 'ro'
 const detectedLang = currentPath.startsWith('/en') ? 'en' : 'ro';
-
-// Allow manual override via props, but default to detected language
 const { lang = detectedLang } = Astro.props;
 ---
 
@@ -24,25 +17,16 @@ const { lang = detectedLang } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/src/assets/css/main.css" />
+
   <title>Your Site</title>
 </head>
 <body>
   <header>
-    <!-- Navbar with all slots -->
     <Navbar lang={lang} currentPath={currentPath}>
-      <!-- LOGO AND NAME -->
       <LogoSiteName slot="logo-and-name" lang={lang} />
-
-      <!-- LANGUAGE DROPDOWN -->
       <LanguageDropdown slot="language-dropdown" lang={lang} currentPath={currentPath} />
-
-      <!-- CONTACT BUTTON -->
       <ContactButtonComponent slot="contact-button" client:load lang={lang} />
     </Navbar>
-
-    <!-- Hero component data -->
-    <HeroPageComponent />
-
   </header>
 
   <slot />
