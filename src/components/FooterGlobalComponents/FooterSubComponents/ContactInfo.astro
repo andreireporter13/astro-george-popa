@@ -1,0 +1,75 @@
+---
+---
+
+<div class="footer-column">
+    <h3>Contact</h3>
+    <ul class="contact-list">
+        <li>
+            <a href="tel:+40720439179">+40 720 439 179</a>
+        </li>
+        <li>
+            <span>Constanta, Romania</span>
+        </li>
+        <li>
+            <a href="mailto:me@georgepopa.photo">me@georgepopa.photo</a>
+        </li>
+    </ul>
+</div>
+
+<style>
+.footer-column h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #c4a574;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-column h3::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #c4a574, transparent);
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li {
+    margin-bottom: 0.8rem;
+    font-family: "Space Grotesk", monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #b5b5b5;
+    letter-spacing: 0.02em;
+}
+
+.contact-list a {
+    color: #b5b5b5;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.contact-list a:hover {
+    color: #c4a574;
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+    .footer-column h3 {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+    }
+}
+</style>

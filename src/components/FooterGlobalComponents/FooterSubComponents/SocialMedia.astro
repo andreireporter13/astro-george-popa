@@ -1,0 +1,107 @@
+---
+import MiniGallery from './MiniGallery.astro';
+
+interface Props {
+    facebookLabel: string;
+    instagramLabel: string;
+    facebookImages: string[];
+    instagramImages: string[];
+}
+
+const { facebookImages, instagramImages } = Astro.props;
+---
+
+<div class="footer-column">
+    <div class="social-section">
+        <a
+            href="https://www.facebook.com/georgepopa.photographer"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+        >
+            Facebook
+        </a>
+        <MiniGallery images={facebookImages} />
+    </div>
+
+    <div class="social-section">
+        <a
+            href="https://www.instagram.com/georgepopa.photographer"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+        >
+            Instagram
+        </a>
+        <MiniGallery images={instagramImages} />
+    </div>
+</div>
+
+<style>
+.footer-column h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #c4a574;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-column h3::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #c4a574, transparent);
+}
+
+.social-section {
+    margin-bottom: 2rem;
+}
+
+.social-link {
+    display: inline-block;
+    font-family: "Space Grotesk", sans-serif;
+    color: #c4a574;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 18px;
+}
+
+.social-link::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    top: 30%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover {
+    color: #ffffff;
+    letter-spacing: 0.25em;
+}
+
+.social-link:hover::before {
+    transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .footer-column h3 {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+    }
+}
+</style>

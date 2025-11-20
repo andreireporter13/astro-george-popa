@@ -1,0 +1,105 @@
+---
+import WaveLine from './FooterSubComponents/WaveLine.astro';
+import BrandSection from './FooterSubComponents/BrandSection.astro';
+import QuickLinks from './FooterSubComponents/QuickLinks.astro';
+import ContactInfo from './FooterSubComponents/ContactInfo.astro';
+import SocialMedia from './FooterSubComponents/SocialMedia.astro';
+import FooterBottom from './FooterSubComponents/FooterBottom.astro';
+
+//
+import { getFooterTranslation } from '../../composables/FooterComposables/footer.js';
+
+const { lang = 'ro' } = Astro.props;
+const t = getFooterTranslation(lang);
+
+const facebookImages = [
+    "https://georgepopa.photo/wp-content/uploads/2025/01/fotograf-nunta-constanta-2025-17-scaled.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2025/01/fotograf-nunta-bucuresti-19.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2025/01/fotograf-cununie-civila-1.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2023/07/fotograf-bun-nunta-4.jpg",
+];
+
+const instagramImages = [
+    "https://georgepopa.photo/wp-content/uploads/2025/05/sedinta-foto-maternitate0751.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2023/07/fotograf-portret-studio.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2025/05/sedinta-foto-maternitate-constanta-5.jpg",
+    "https://georgepopa.photo/wp-content/uploads/2025/02/fotograf-nou-nascut-studio-constanta-049-1.webp",
+
+
+];
+
+---
+
+<footer class="footer">
+    <WaveLine />
+    
+    <div class="footer-content">
+        <div class="footer-grid">
+            <BrandSection 
+                title={t.brand.title}
+                description={t.brand.description}
+                note={t.brand.note}
+            />
+            <QuickLinks 
+                title={t.quickLinks.title}
+                menuItems={t.quickLinks.items}
+            />
+            <ContactInfo 
+                title={t.contact.title}
+                phone={t.contact.phone}
+                location={t.contact.location}
+                email={t.contact.email}
+            />
+            <SocialMedia 
+                facebookLabel={t.social.facebook}
+                instagramLabel={t.social.instagram}
+                facebookImages={facebookImages} 
+                instagramImages={instagramImages} 
+            />
+        </div>
+        
+        <FooterBottom 
+            copyright={t.footer.copyright}
+            seoKeywords={t.footer.seoKeywords}
+            anpcSalAlt={t.footer.anpcSal}
+            anpcSolAlt={t.footer.anpcSol}
+        />
+    </div>
+</footer>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Archivo:wght@200;300;400;500&display=swap");
+
+.footer {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1515 100%);
+    color: #d4d4d4;
+    padding: 0;
+    font-family: "Archivo", -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-content {
+    padding: 4rem 1.5rem 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        padding: 3rem 1.5rem 1.5rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+</style>

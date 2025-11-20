@@ -1,0 +1,111 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    note: string;
+}
+
+const { title, description, note } = Astro.props;
+---
+
+<div class="footer-column">
+    <div class="brand-header">
+        <img
+            src="https://georgepopa.photo/wp-content/uploads/2020/10/george-popa-fotograf-logo-fotografii-constanta-evenimente-nunta-botez-si-altele.png"
+            alt="George Popa Fotograf"
+            class="brand-logo"
+        />
+        <h2 class="brand-title">{title}</h2>
+    </div>
+    <p class="brand-description">
+        {description}
+    </p>
+    <p class="brand-note">
+        {note}
+    </p>
+</div>
+
+<style>
+.footer-column h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #c4a574;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-column h3::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #c4a574, transparent);
+}
+
+.brand-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.brand-logo {
+    width: 50px;
+    height: auto;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 10px rgba(196, 165, 116, 0.3));
+}
+
+.brand-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #c4a574;
+    margin: 0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(196, 165, 116, 0.2);
+}
+
+.brand-description {
+    font-family: "Archivo", sans-serif;
+    color: #b0b0b0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
+}
+
+.brand-note {
+    font-family: "Archivo", sans-serif;
+    color: #999999;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .brand-logo {
+        width: 40px;
+    }
+
+    .brand-title {
+        font-size: 1.2rem;
+    }
+
+    .footer-column h3 {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+    }
+}
+</style>

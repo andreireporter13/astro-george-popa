@@ -3,26 +3,65 @@ const { lang } = Astro.props;
 const currentUrl = lang === 'en' ? '/en/' : '/ro/';
 ---
 
-<a href={currentUrl} class="LogoAndName">
+<a href={currentUrl} class="logo-and-name">
   <img
     src="/src/assets/george-popa-fotograf-logo-fotografii-constanta-evenimente-nunta-botez-si-altele.png"
     alt="George Popa Fotograf Evenimente: nunta, botez, majorat, newborn, kids, save the date"
     height="42"
+    class="logo-image"
   />
-  <span class="SiteName">
+  <span class="site-name">
     George Popa Fotograf
   </span>
 </a>
 
 <style>
-  .LogoAndName {
+  .logo-and-name {
     display: flex;
     align-items: center;
     gap: 1rem;
     text-decoration: none;
   }
   
-  .SiteName {
-    font-weight: bold;
+  .logo-image {
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+  }
+  
+  .scrolled .logo-image {
+    filter: brightness(0);
+  }
+  
+  .site-name {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .scrolled .site-name {
+    color: #1a1515;
+  }
+
+  .logo-and-name:hover .logo-image {
+    opacity: 0.8;
+  }
+
+  .logo-and-name:hover .site-name {
+    color: #c4a574;
   }
 </style>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const logoLink = document.querySelector('.logo-and-name');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      logoLink?.classList.add('scrolled');
+    } else {
+      logoLink?.classList.remove('scrolled');
+    }
+  });
+</script>

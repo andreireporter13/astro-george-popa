@@ -1,35 +1,165 @@
 ---
-import { getTranslatedUrl } from '../../composables/NavbarComposables/pageTranslations.js';
+// src/components/NavbarGlobalComponents/LanguageDropdown.astro
+const { currentPath, lang } = Astro.props;  // ← SCHIMBĂ currentLang în lang
 
-const { lang, currentPath } = Astro.props;
+function getTranslatedPath(path: any, targetLang: any) {
+  const pathWithoutLang = path.replace(/^\/(ro|en)/, '');
+  return `/${targetLang}${pathWithoutLang || '/'}`;
+}
 
 const languages = [
-  { 
-    code: "ro", 
-    label: "Romana", 
-    flag: "🇷🇴", 
-    url: getTranslatedUrl(currentPath, 'ro')
-  },
-  { 
-    code: "en", 
-    label: "English", 
-    flag: "🇬🇧", 
-    url: getTranslatedUrl(currentPath, 'en')
-  },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'en', label: 'English', flag: '🇺🇸' }
 ];
 
-// Fallback to Romanian if the language is not found
-const currentLang = languages.find(l => l.code === lang) || languages[0];
-const otherLanguages = languages.filter(l => l.code !== lang);
+const currentLanguage = languages.find(l => l.code === lang) || languages[0];  // ← SCHIMBĂ currentLang în lang
 ---
 
-<details>
-  <summary>{currentLang.flag} {currentLang.label}</summary>
-  <ul>
-    {otherLanguages.map(l => (
-      <li>
-        <a href={l.url}>{l.flag} {l.label}</a>
-      </li>
+<div class="language-dropdown">
+  <button class="dropdown-toggle" aria-label="Schimbă limba">
+    <span class="flag">{currentLanguage.flag}</span>
+    <span class="label">{currentLanguage.code.toUpperCase()}</span>
+    <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
+      <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  
+  <div class="dropdown-menu">
+    {languages.map((language) => (
+      <a 
+        href={getTranslatedPath(currentPath, language.code)}
+        class:list={["dropdown-item", { active: language.code === lang }]}
+      >
+        <span class="flag">{language.flag}</span>
+        <span class="label">{language.label}</span>
+        {language.code === lang && (
+          <svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8L6.5 11.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        )}
+      </a>
     ))}
-  </ul>
-</details>
+  </div>
+</div>
+
+<style>
+.language-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(196, 165, 116, 0.2);
+  border-radius: 8px;
+  color: #d4d4d4;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background: rgba(196, 165, 116, 0.1);
+  border-color: rgba(196, 165, 116, 0.4);
+}
+
+.dropdown-toggle .flag {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.dropdown-toggle .chevron {
+  color: #999999;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-toggle:hover .chevron {
+  color: #c4a574;
+}
+
+.language-dropdown:hover .dropdown-toggle .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 160px;
+  background: #1a1515;
+  border: 1px solid rgba(196, 165, 116, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.language-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #d4d4d4;
+  text-decoration: none;
+  font-family: "Archivo", sans-serif;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(196, 165, 116, 0.1);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(196, 165, 116, 0.1);
+  color: #c4a574;
+}
+
+.dropdown-item.active {
+  background: rgba(196, 165, 116, 0.15);
+  color: #c4a574;
+}
+
+.dropdown-item .flag {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.dropdown-item .check {
+  margin-left: auto;
+  color: #c4a574;
+}
+
+@media (max-width: 768px) {
+  .dropdown-toggle {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+  
+  .dropdown-menu {
+    min-width: 140px;
+  }
+  
+  .dropdown-item {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+</style>

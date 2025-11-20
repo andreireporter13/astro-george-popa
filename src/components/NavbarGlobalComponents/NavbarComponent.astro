@@ -7,23 +7,492 @@ const { lang, currentPath } = Astro.props;
 const navItems = lang === 'en' ? navItemsEN : navItemsRO;
 ---
 
-<nav>
-  <!-- HOME LINK -->
-  <a href={navItems.home.href}>{navItems.home.label}</a>
+<nav class="navbar-component" id="navbar">
+  <div class="navbar-component__container">
+    <!-- LOGO AND NAME SLOT - STANGA -->
+    <div class="navbar-component__logo">
+      <slot name="logo-and-name" />
+    </div>
 
-  <!-- MAIN NAV -->
-  <ul>
-    {navItems.items.map(item => (
-      <li>
-        <a href={item.href}>{item.label}</a>
+    <!-- MAIN NAV - MIJLOC -->
+    <ul class="navbar-component__list">
+      <!-- HOME -->
+      <li class="navbar-component__item">
+        <a 
+          href={navItems.home.href}
+          class={`navbar-component__link ${currentPath === navItems.home.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.home.label}</span>
+          <span class="link-underline"></span>
+        </a>
       </li>
-    ))}
-  </ul>
 
-  <slot name="language-dropdown" />
+      <!-- DESPRE MINE / ABOUT ME -->
+      <li class="navbar-component__item">
+        <a 
+          href={navItems.aboutMe.href}
+          class={`navbar-component__link ${currentPath === navItems.aboutMe.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.aboutMe.label}</span>
+          <span class="link-underline"></span>
+        </a>
+      </li>
 
-  <!-- CONTACT BUTTON SLOT -->
-  <div class="contact-btn">
-    <slot name="contact-button" />
+      <!-- NUNTA / WEDDING - with dropdown -->
+      <li class="navbar-component__item navbar-component__item--dropdown">
+        <a 
+          href={navItems.wedding.href}
+          class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.wedding.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.wedding.label}</span>
+          <span class="link-underline"></span>
+        </a>
+        <ul class="navbar-component__dropdown">
+          {navItems.wedding.items.map(item => (
+            <li>
+              <a 
+                href={item.href}
+                class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
+              >
+                <span class="dropdown-icon">💍</span>
+                <span>{item.label}</span>
+                <span class="dropdown-arrow">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+
+      <!-- BOTEZ / BAPTISM -->
+      <li class="navbar-component__item">
+        <a 
+          href={navItems.baptism.href}
+          class={`navbar-component__link ${currentPath === navItems.baptism.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.baptism.label}</span>
+          <span class="link-underline"></span>
+        </a>
+      </li>
+
+      <!-- SEDINTE / SESSIONS - with dropdown -->
+      <li class="navbar-component__item navbar-component__item--dropdown">
+        <a 
+          href={navItems.sessions.href}
+          class={`navbar-component__link navbar-component__link--parent ${currentPath === navItems.sessions.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.sessions.label}</span>
+          <span class="link-underline"></span>
+        </a>
+        <ul class="navbar-component__dropdown">
+          {navItems.sessions.items.map((item, index) => {
+            const icons = ['🤰', '👶', '🎈'];
+            return (
+              <li>
+                <a 
+                  href={item.href}
+                  class={`navbar-component__dropdown-link ${currentPath === item.href ? 'navbar-component__dropdown-link--active' : ''}`}
+                >
+                  <span class="dropdown-icon">{icons[index]}</span>
+                  <span>{item.label}</span>
+                  <span class="dropdown-arrow">→</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </li>
+
+      <!-- CONTACT -->
+      <li class="navbar-component__item">
+        <a 
+          href={navItems.contact.href}
+          class={`navbar-component__link ${currentPath === navItems.contact.href ? 'navbar-component__link--active' : ''}`}
+        >
+          <span class="link-text">{navItems.contact.label}</span>
+          <span class="link-underline"></span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- ACTIONS - DREAPTA -->
+    <div class="navbar-component__actions">
+      <slot name="language-dropdown" />
+      
+      <!-- CONTACT BUTTON SLOT -->
+      <div class="navbar-component__contact">
+        <slot name="contact-button" />
+      </div>
+    </div>
   </div>
 </nav>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  .navbar-component {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    padding: 1.3rem 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .navbar-component.scrolled {
+    padding: 0.85rem 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .navbar-component__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 0 2rem;
+  }
+
+  /* LOGO - STANGA */
+  .navbar-component__logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* MENIU - MIJLOC */
+  .navbar-component__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .navbar-component__item {
+    margin: 0;
+    position: relative;
+  }
+
+  .navbar-component__link {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    padding: 0.7rem 1.2rem;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .link-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .link-underline {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 60%;
+    height: 2px;
+    background: #dc2626;
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+  }
+
+  .navbar-component__link:hover .link-underline {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .scrolled .navbar-component__link {
+    color: #555555;
+  }
+
+  .navbar-component__link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .scrolled .navbar-component__link:hover {
+    color: #1a1a1a;
+    background: rgba(220, 38, 38, 0.08);
+  }
+
+  .navbar-component__link--active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+  }
+
+  .scrolled .navbar-component__link--active {
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.12);
+  }
+
+  .navbar-component__link--parent {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .navbar-component__link--parent::after {
+    content: '';
+    display: inline-block;
+    margin-left: 0.25rem;
+    vertical-align: 0.12em;
+    border-top: 0.4em solid;
+    border-right: 0.35em solid transparent;
+    border-bottom: 0;
+    border-left: 0.35em solid transparent;
+    transition: transform 0.3s ease;
+  }
+
+  .navbar-component__item--dropdown:hover .navbar-component__link--parent::after {
+    transform: rotate(180deg);
+  }
+
+  /* DROPDOWN STYLES */
+  .navbar-component__dropdown {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    margin: 0;
+    padding: 0.6rem;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  .scrolled .navbar-component__dropdown {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .navbar-component__item--dropdown:hover .navbar-component__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+  }
+
+  .navbar-component__dropdown li {
+    margin: 0;
+  }
+
+  .navbar-component__dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .scrolled .navbar-component__dropdown-link {
+    color: #444444;
+  }
+
+  .dropdown-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-arrow {
+    margin-left: auto;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    color: #dc2626;
+  }
+
+  .navbar-component__dropdown-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    transform: translateX(6px);
+  }
+
+  .navbar-component__dropdown-link:hover .dropdown-icon {
+    transform: scale(1.15);
+  }
+
+  .navbar-component__dropdown-link:hover .dropdown-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scrolled .navbar-component__dropdown-link:hover {
+    background: rgba(220, 38, 38, 0.08);
+    color: #dc2626;
+  }
+
+  .navbar-component__dropdown-link--active {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .scrolled .navbar-component__dropdown-link--active {
+    background: rgba(220, 38, 38, 0.12);
+    color: #dc2626;
+  }
+
+  /* ACTIONS - DREAPTA */
+  .navbar-component__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .navbar-component__contact {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .navbar-component__container {
+      gap: 2rem;
+    }
+
+    .navbar-component__list {
+      gap: 0.25rem;
+    }
+
+    .navbar-component__link {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .navbar-component {
+      padding: 1rem 0;
+    }
+
+    .navbar-component.scrolled {
+      padding: 0.85rem 0;
+    }
+
+    .navbar-component__container {
+      gap: 1.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .navbar-component__link {
+      padding: 0.55rem 0.85rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar-component {
+      background: rgba(26, 21, 21, 0.98);
+    }
+
+    .navbar-component.scrolled {
+      background: #ffffff;
+    }
+
+    .navbar-component__container {
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 0 1rem;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    .navbar-component__logo {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .navbar-component__list {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .navbar-component__link {
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+    }
+
+    .navbar-component__actions {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .navbar-component__dropdown {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      background: rgba(196, 165, 116, 0.05);
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(196, 165, 116, 0.15);
+    }
+
+    .scrolled .navbar-component__dropdown {
+      background: rgba(249, 249, 249, 0.9);
+    }
+
+    .navbar-component__dropdown-link:hover {
+      transform: translateX(3px);
+    }
+  }
+
+  /* Accessibility */
+  .navbar-component__link:focus-visible,
+  .navbar-component__dropdown-link:focus-visible {
+    outline: 2px solid rgba(220, 38, 38, 0.5);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
+  });
+</script>
