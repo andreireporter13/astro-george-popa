@@ -20,7 +20,7 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
   <!-- Desktop: Dropdown cu hover -->
   <button class="language-dropdown__btn language-dropdown__btn--desktop" type="button">
     <span class="language-dropdown__flag">{currentLanguage.flag}</span>
-    <span class="language-dropdown__text">{currentLanguage.label}</span>
+    <span class="language-dropdown__text">{currentLanguage.code.toUpperCase()}</span>
     <svg class="language-dropdown__arrow" width="12" height="8" viewBox="0 0 12 8" fill="none">
       <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -38,7 +38,7 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
         class:list={["language-dropdown__option", { "language-dropdown__option--active": language.code === lang }]}
       >
         <span class="language-dropdown__flag">{language.flag}</span>
-        <span class="language-dropdown__text">{language.label}</span>
+        <span class="language-dropdown__text">{language.code.toUpperCase()}</span>
         {language.code === lang && (
           <svg class="language-dropdown__check" width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8L6.5 11.5L13 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -123,8 +123,8 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
   }
 
   .language-dropdown__text {
-    font-weight: 500;
-    letter-spacing: 0.01em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
   }
 
   .language-dropdown__arrow {
@@ -149,7 +149,7 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
     border-radius: 14px;
     border: 1.5px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
-    min-width: 180px;
+    min-width: 140px;
     padding: 0.6rem;
     opacity: 0;
     visibility: hidden;
@@ -182,8 +182,9 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
     color: rgba(255, 255, 255, 0.95);
     text-decoration: none;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.92rem;
+    letter-spacing: 0.05em;
     border-radius: 10px;
     position: relative;
   }
@@ -213,7 +214,7 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
   .language-dropdown__option--active {
     background: rgba(255, 255, 255, 0.2);
     color: #ffffff;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .language-dropdown__option--active::before {

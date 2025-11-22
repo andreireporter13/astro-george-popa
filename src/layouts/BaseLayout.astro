@@ -5,6 +5,9 @@ import ContactButtonComponent from '../components/NavbarGlobalComponents/Contact
 import LanguageDropdown from '../components/NavbarGlobalComponents/LanguageDropdown.astro';
 import FooterComponent from '../components/FooterGlobalComponents/FooterComponent.astro';
 
+// global components
+import HeroComponent from '../components/GlobalComponents/MobileButtonComponent.vue';
+
 const currentPath = Astro.url.pathname;
 const detectedLang = currentPath.startsWith('/en') ? 'en' : 'ro';
 const { lang = detectedLang } = Astro.props;
@@ -16,8 +19,14 @@ const { lang = detectedLang } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/src/assets/css/main.css" />
-
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <title>Your Site</title>
+  
 </head>
 <body>
   <header>
@@ -33,6 +42,8 @@ const { lang = detectedLang } = Astro.props;
       <ContactButtonComponent slot="contact-button" client:load lang={lang} />
     </Navbar>
   </header>
+
+  <HeroComponent client:load />
 
   <slot />
 

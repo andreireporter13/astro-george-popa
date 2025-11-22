@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroPageComponent from '../../components/HomePageComponets/HeroPageComponent.astro';
+import HeroPageComponent from '../../components/HomePageComponets/HeroPageComponent.vue';
 ---
 
 <BaseLayout lang="en">
-  <HeroPageComponent />
-  <h1>Content in english</h1>
+  <HeroPageComponent client:load lang="en" />
+  <h1>English Content</h1>
 </BaseLayout>
