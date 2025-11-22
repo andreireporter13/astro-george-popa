@@ -3,7 +3,7 @@ const { lang } = Astro.props;
 const currentUrl = lang === 'en' ? '/en/' : '/ro/';
 ---
 
-<a href={currentUrl} class="logo-and-name">
+<a href={currentUrl} class="logo-and-name" id="logoAndName">
   <img
     src="/src/assets/george-popa-fotograf-logo-fotografii-constanta-evenimente-nunta-botez-si-altele.png"
     alt="George Popa Fotograf Evenimente: nunta, botez, majorat, newborn, kids, save the date"
@@ -28,7 +28,9 @@ const currentUrl = lang === 'en' ? '/en/' : '/ro/';
     transition: filter 0.3s ease;
   }
   
-  .scrolled .logo-image {
+  /* Când logo are clasa scrolled sau menu-active */
+  .logo-and-name.scrolled .logo-image,
+  .logo-and-name.menu-active .logo-image {
     filter: brightness(0);
   }
   
@@ -40,7 +42,9 @@ const currentUrl = lang === 'en' ? '/en/' : '/ro/';
     font-family: 'Inter', sans-serif;
   }
 
-  .scrolled .site-name {
+  /* Când logo are clasa scrolled sau menu-active */
+  .logo-and-name.scrolled .site-name,
+  .logo-and-name.menu-active .site-name {
     color: #1a1515;
   }
 
@@ -55,13 +59,39 @@ const currentUrl = lang === 'en' ? '/en/' : '/ro/';
 
 <script>
   const navbar = document.getElementById('navbar');
-  const logoLink = document.querySelector('.logo-and-name');
+  const logoLink = document.getElementById('logoAndName');
   
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      logoLink?.classList.add('scrolled');
+  // Function to update logo based on navbar state
+  function updateLogoState() {
+    if (!navbar || !logoLink) return;
+
+    // Check scrolled
+    if (navbar.classList.contains('scrolled')) {
+      logoLink.classList.add('scrolled');
     } else {
-      logoLink?.classList.remove('scrolled');
+      logoLink.classList.remove('scrolled');
     }
+
+    // Check menu-active
+    if (navbar.classList.contains('menu-active')) {
+      logoLink.classList.add('menu-active');
+    } else {
+      logoLink.classList.remove('menu-active');
+    }
+  }
+
+  // Observer pentru a detecta când navbar primește clase
+  const observer = new MutationObserver(() => {
+    updateLogoState();
   });
+
+  if (navbar) {
+    observer.observe(navbar, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+
+  // Initial check
+  updateLogoState();
 </script>

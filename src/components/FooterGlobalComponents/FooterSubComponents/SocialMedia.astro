@@ -1,107 +1,77 @@
 ---
-import MiniGallery from './MiniGallery.astro';
+const { facebookLabel, instagramLabel, facebookImages, instagramImages } = Astro.props;
 
-interface Props {
-    facebookLabel: string;
-    instagramLabel: string;
-    facebookImages: string[];
-    instagramImages: string[];
-}
-
-const { facebookImages, instagramImages } = Astro.props;
+const facebookLink = "https://www.facebook.com/georgepopa.photographer";
+const instagramLink = "https://www.instagram.com/georgepopa.photographer";
 ---
 
-<div class="footer-column">
-    <div class="social-section">
-        <a
-            href="https://www.facebook.com/georgepopa.photographer"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-link"
-        >
-            Facebook
-        </a>
-        <MiniGallery images={facebookImages} />
+<div class="social-media">
+    <div class="social-block">
+        <h3>
+            <a href={facebookLink} target="_blank" rel="noopener noreferrer">
+                {facebookLabel}
+            </a>
+        </h3>
+        <div class="social-gallery">
+            {facebookImages.map((img: any, i: any) => (
+                <img src={img} alt={`Facebook image ${i}`} loading="lazy" />
+            ))}
+        </div>
     </div>
 
-    <div class="social-section">
-        <a
-            href="https://www.instagram.com/georgepopa.photographer"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-link"
-        >
-            Instagram
-        </a>
-        <MiniGallery images={instagramImages} />
+    <div class="social-block">
+        <h3>
+            <a href={instagramLink} target="_blank" rel="noopener noreferrer">
+                {instagramLabel}
+            </a>
+        </h3>
+        <div class="social-gallery">
+            {instagramImages.map((img: any, i:any) => (
+                <img src={img} alt={`Instagram image ${i}`} loading="lazy" />
+            ))}
+        </div>
     </div>
 </div>
 
 <style>
-.footer-column h3 {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: #c4a574;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    position: relative;
-    padding-bottom: 0.5rem;
+.social-media {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.footer-column h3::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 30px;
-    height: 2px;
-    background: linear-gradient(90deg, #c4a574, transparent);
-}
-
-.social-section {
-    margin-bottom: 2rem;
-}
-
-.social-link {
-    display: inline-block;
-    font-family: "Space Grotesk", sans-serif;
-    color: #c4a574;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
+.social-block h3 {
     margin-bottom: 1rem;
-    transition: all 0.3s ease;
-    position: relative;
-    padding-left: 18px;
+    font-size: 1.3rem;
+    font-weight: 600;
 }
 
-.social-link::before {
-    content: "→";
-    position: absolute;
-    left: 0;
-    top: 30%;
-    transform: translateY(-50%);
-    font-size: 1rem;
-    transition: transform 0.3s ease;
-}
-
-.social-link:hover {
+.social-block h3 a {
     color: #ffffff;
-    letter-spacing: 0.25em;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.social-link:hover::before {
-    transform: translateX(3px);
+.social-block h3 a:hover {
+    color: #c4a574;
 }
 
-@media (max-width: 768px) {
-    .footer-column h3 {
-        font-size: 0.75rem;
-        letter-spacing: 0.15em;
-    }
+.social-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.social-gallery img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.social-gallery img:hover {
+    transform: scale(1.05);
 }
 </style>

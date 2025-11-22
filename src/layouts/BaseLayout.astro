@@ -1,5 +1,4 @@
 ---
-
 import LogoSiteName from '../components/NavbarGlobalComponents/LogoSiteName.astro';
 import Navbar from '../components/NavbarGlobalComponents/NavbarComponent.astro';
 import ContactButtonComponent from '../components/NavbarGlobalComponents/ContactButtonComponent.vue';
@@ -24,7 +23,13 @@ const { lang = detectedLang } = Astro.props;
   <header>
     <Navbar lang={lang} currentPath={currentPath}>
       <LogoSiteName slot="logo-and-name" lang={lang} />
+
+      <!-- Desktop language dropdown -->
       <LanguageDropdown slot="language-dropdown" lang={lang} currentPath={currentPath} />
+      
+      <!-- Mobile language dropdown -->
+      <LanguageDropdown slot="language-dropdown-mobile" lang={lang} currentPath={currentPath} />
+      
       <ContactButtonComponent slot="contact-button" client:load lang={lang} />
     </Navbar>
   </header>
