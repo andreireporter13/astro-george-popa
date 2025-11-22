@@ -1,10 +1,6 @@
 ---
 const { currentPath, lang } = Astro.props;
-
-function getTranslatedPath(path: any, targetLang: any) {
-  const pathWithoutLang = path.replace(/^\/(ro|en)/, '');
-  return `/${targetLang}${pathWithoutLang || '/'}`;
-}
+import { getTranslatedUrl } from '../../composables/NavbarComposables/pageTranslations.js';
 
 const languages = [
   { code: 'ro', label: 'Română', flag: '🇷🇴' },
@@ -13,7 +9,8 @@ const languages = [
 
 const currentLanguage = languages.find(l => l.code === lang) || languages[0];
 const otherLanguage = languages.find(l => l.code !== lang) || languages[1];
-const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
+
+const switchToUrl = getTranslatedUrl(currentPath, otherLanguage.code);
 ---
 
 <div class="language-dropdown" id="languageDropdown">
@@ -34,7 +31,7 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
   <div class="language-dropdown__menu">
     {languages.map((language) => (
       <a 
-        href={getTranslatedPath(currentPath, language.code)}
+        href={getTranslatedUrl(currentPath, language.code)}
         class:list={["language-dropdown__option", { "language-dropdown__option--active": language.code === lang }]}
       >
         <span class="language-dropdown__flag">{language.flag}</span>
@@ -48,6 +45,40 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
     ))}
   </div>
 </div>
+
+<script>
+  import { initScrollHandler } from '../../composables/GlobalComposables/scrollHandler.js';
+
+  const navbar = document.getElementById('navbar');
+  const languageDropdown = document.getElementById('languageDropdown');
+  
+  if (languageDropdown) {
+    // Scroll handler
+    initScrollHandler((isScrolled: any) => {
+      if (isScrolled) {
+        languageDropdown.classList.add('scrolled');
+      } else {
+        languageDropdown.classList.remove('scrolled');
+      }
+    }, 50);
+
+    // Observer for menu-active
+    if (navbar) {
+      const observer = new MutationObserver(() => {
+        if (navbar.classList.contains('menu-active')) {
+          languageDropdown.classList.add('menu-active');
+        } else {
+          languageDropdown.classList.remove('menu-active');
+        }
+      });
+
+      observer.observe(navbar, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+  }
+</script>
 
 <style>
   .language-dropdown {
@@ -301,37 +332,3 @@ const switchToUrl = getTranslatedPath(currentPath, otherLanguage.code);
     }
   }
 </style>
-
-<script>
-  import { initScrollHandler } from '../../composables/GlobalComposables/scrollHandler.js';
-
-  const navbar = document.getElementById('navbar');
-  const languageDropdown = document.getElementById('languageDropdown');
-  
-  if (languageDropdown) {
-    // Scroll handler
-    initScrollHandler((isScrolled: any) => {
-      if (isScrolled) {
-        languageDropdown.classList.add('scrolled');
-      } else {
-        languageDropdown.classList.remove('scrolled');
-      }
-    }, 50);
-
-    // Observer for menu-active
-    if (navbar) {
-      const observer = new MutationObserver(() => {
-        if (navbar.classList.contains('menu-active')) {
-          languageDropdown.classList.add('menu-active');
-        } else {
-          languageDropdown.classList.remove('menu-active');
-        }
-      });
-
-      observer.observe(navbar, {
-        attributes: true,
-        attributeFilter: ['class']
-      });
-    }
-  }
-</script>

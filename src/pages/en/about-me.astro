@@ -1,8 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { navItemsRO } from '../../composables/NavbarComposables/navItems.js';
+import HeroPageComponent from '../../components/HomePageComponets/HeroPageComponent.vue';
+
+import { navItemsEN } from '../../composables/NavbarComposables/navItems.js';
+
+const pageTitle = "About me - George Popa Photographer";
+const pageDescription = "Learn more about George Popa, professional photographer capturing special moments.";
+const pageImage = "/src/assets/images/about-og.jpg";
 ---
-<BaseLayout lang="en" navItems={navItemsRO}>
-  <h1>Welcome to Fotograf page</h1>
-  <p>About Main page content in Romanian.</p>
+
+<BaseLayout 
+  lang="en" 
+  navItems={navItemsEN} 
+  {pageTitle} 
+  {pageDescription} 
+  {pageImage}
+>
+
+  <HeroPageComponent client:load lang="en" />
+  <h1>Welcome to the photographer's page</h1>
+  <p>About main page content in English.</p>
 </BaseLayout>

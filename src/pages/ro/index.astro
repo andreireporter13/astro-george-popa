@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeroPageComponent from '../../components/HomePageComponets/HeroPageComponent.vue';
+
+const pageTitle = "Acasă - George Popa Fotograf";
 ---
 
-<BaseLayout lang="ro">
+<BaseLayout lang="ro" {pageTitle}>
   <HeroPageComponent client:load lang="ro" />
   
   <h1>Conținut în română</h1>

@@ -1,9 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeroPageComponent from '../../components/HomePageComponets/HeroPageComponent.vue';
+
+const pageTitle = "Home - George Popa Photographer";
 ---
 
-<BaseLayout lang="en">
+<BaseLayout lang="en" {pageTitle}>
+
   <HeroPageComponent client:load lang="en" />
+  
   <h1>English Content</h1>
+
 </BaseLayout>

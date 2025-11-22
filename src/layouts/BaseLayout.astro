@@ -4,49 +4,117 @@ import Navbar from '../components/NavbarGlobalComponents/NavbarComponent.astro';
 import ContactButtonComponent from '../components/NavbarGlobalComponents/ContactButtonComponent.vue';
 import LanguageDropdown from '../components/NavbarGlobalComponents/LanguageDropdown.astro';
 import FooterComponent from '../components/FooterGlobalComponents/FooterComponent.astro';
+import MobileButtonComponent from '../components/GlobalComponents/MobileButtonComponent.vue';
 
-// global components
-import HeroComponent from '../components/GlobalComponents/MobileButtonComponent.vue';
-
+// Get current path and detect language from URL
 const currentPath = Astro.url.pathname;
 const detectedLang = currentPath.startsWith('/en') ? 'en' : 'ro';
-const { lang = detectedLang } = Astro.props;
----
 
+// Props from the page
+const {
+  lang = detectedLang,
+  pageTitle,
+  pageDescription,
+  pageImage = "/src/assets/images/default-og.jpg",
+} = Astro.props;
+
+// navItems js
+import { navItemsRO, navItemsEN } from '../composables/NavbarComposables/navItems.js';
+const navItems = detectedLang ? navItemsRO : navItemsEN;
+
+// Dynamic SEO data based on detected language
+const seo: any = {
+  ro: {
+    title: pageTitle || "George Popa Fotograf",
+    description: pageDescription || "George Popa Fotograf – Capturăm momentele importante.",
+    keywords: "fotograf, fotografie, evenimente, portrete, George Popa"
+  },
+  en: {
+    title: pageTitle || "George Popa Photographer",
+    description: pageDescription || "George Popa Photographer – We capture your most important moments.",
+    keywords: "photographer, photography, events, portraits, George Popa"
+  }
+};
+
+const { title, description, keywords } = seo[lang];
+---
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Main CSS -->
   <link rel="stylesheet" href="/src/assets/css/main.css" />
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <title>Your Site</title>
-  
+
+  <!-- Title and SEO meta -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph tags for Facebook/LinkedIn -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={pageImage} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={`https://yourwebsite.com${currentPath}`} />
+  <meta property="og:locale" content={lang} />
+
+  <!-- Twitter Card tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={pageImage} />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" />
+
+  <!-- JSON-LD structured data for SEO -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": title,
+      "url": "https://yourwebsite.com",
+      "logo": "https://yourwebsite.com/favicon.ico",
+      "sameAs": [
+        "https://www.facebook.com/yourpage",
+        "https://www.instagram.com/yourpage",
+        "https://www.linkedin.com/in/yourpage"
+      ]
+    })}
+  </script>
 </head>
 <body>
+  <!-- Header with Navbar -->
   <header>
     <Navbar lang={lang} currentPath={currentPath}>
       <LogoSiteName slot="logo-and-name" lang={lang} />
 
       <!-- Desktop language dropdown -->
       <LanguageDropdown slot="language-dropdown" lang={lang} currentPath={currentPath} />
-      
+
       <!-- Mobile language dropdown -->
       <LanguageDropdown slot="language-dropdown-mobile" lang={lang} currentPath={currentPath} />
-      
+
+      <!-- Contact button -->
       <ContactButtonComponent slot="contact-button" client:load lang={lang} />
     </Navbar>
   </header>
 
-  <HeroComponent client:load />
+  <!-- Global mobile button component -->
+  <MobileButtonComponent client:load />
 
+  <!-- Main content slot for page content -->
   <slot />
 
+  <!-- Footer component -->
   <FooterComponent lang={lang} />
 </body>
 </html>
